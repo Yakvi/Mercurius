@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    DateTime date = DateTime.Today;
+    [SerializeField]
+    Text dateOutput;
     [SerializeField]
     Text debugLogger;
     public void DebugLog(string log)
@@ -13,17 +16,24 @@ public class GameManager : MonoBehaviour
         Debug.Log(log);
     }
 
+    void Update()
+    {
+        var dateParsed = date.ToString("dd MMM yyyy");
+        dateOutput.text = dateParsed;
+    }
+
     public void OnDatePicker()
     {
-        var today = DateTime.Today;
         DebugLog("Started date picking");
-        NativeDialog.OpenDatePicker(today.Year, today.Month, today.Day,
+        NativeDialog.OpenDatePicker(date.Year, date.Month, date.Day,
             (DateTime _date) =>
             {
+                date = _date;
                 DebugLog(_date.ToString());
             },
             (DateTime _date) =>
             {
+                date = _date;
                 DebugLog(_date.ToString());
             });
     }
