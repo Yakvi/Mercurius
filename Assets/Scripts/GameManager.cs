@@ -16,23 +16,18 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        var dateParsed = date.ToString("dd MMM yyyy");
-        dateOutput.text = dateParsed;
+        dateOutput.text = date.ToString("dd MMM yyyy");
     }
 
     public void OnDatePicker()
     {
         DebugLog("Started date picking");
-        NativeDialog.OpenDatePicker(date.Year, date.Month, date.Day,
-            (DateTime _date) =>
-            {
-                date = _date;
-                DebugLog(_date.ToString());
-            },
-            (DateTime _date) =>
-            {
-                date = _date;
-                DebugLog(_date.ToString());
-            });
+        NativeDialog.OpenDatePicker(date.Year, date.Month, date.Day, SetDate, SetDate);
+    }
+
+    private void SetDate(DateTime _date)
+    {
+        date = _date;
+        DebugLog(_date.ToString());
     }
 }

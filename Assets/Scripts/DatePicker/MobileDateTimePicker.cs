@@ -1,8 +1,7 @@
-﻿// Mobile Dialog Unity by PingAK9, MIT license. https://unitylist.com/p/dp9/Mobile-Dialog-Unity 
+﻿// Modified snippet from Mobile Dialog Unity by PingAK9, MIT license. https://unitylist.com/p/dp9/Mobile-Dialog-Unity 
 
 using UnityEngine;
 using System;
-using System.Globalization;
 
 namespace pingak9
 {
@@ -32,20 +31,7 @@ namespace pingak9
             return dialog;
         }
 
-        public static MobileDateTimePicker CreateTime(Action<DateTime> onChange = null, Action<DateTime> onClose = null)
-        {
-            MobileDateTimePicker dialog;
-            dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
-            dialog.OnDateChanged = onChange;
-            dialog.OnPickerClosed = onClose;
-
-            MobileNative.showTimePicker();
-            return dialog;
-        }
-
         #endregion
-
-
 
         //--------------------------------------
         // Events

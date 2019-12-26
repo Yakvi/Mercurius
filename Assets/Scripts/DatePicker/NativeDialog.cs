@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿// Modified snippet from Mobile Dialog Unity by PingAK9, MIT license. https://unitylist.com/p/dp9/Mobile-Dialog-Unity 
+
 using System;
 
 namespace pingak9
@@ -11,10 +11,6 @@ namespace pingak9
         public static void OpenDatePicker(int year , int month, int day, Action<DateTime> onChange = null, Action<DateTime> onClose = null)
         {
             MobileDateTimePicker.CreateDate(year, month, day, onChange, onClose);
-        }
-        public static void OpenTimePicker(Action<DateTime> onChange = null, Action<DateTime> onClose = null)
-        {
-            MobileDateTimePicker.CreateTime(onChange, onClose);
         }
     }
 }
