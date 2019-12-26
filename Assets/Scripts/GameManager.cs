@@ -7,9 +7,7 @@ public class GameManager : MonoBehaviour
 {
     DateTime date = DateTime.Today;
     [SerializeField]
-    Text dateOutput;
-    [SerializeField]
-    Text debugLogger;
+    Text debugLogger, dateOutput;
     public void DebugLog(string log)
     {
         debugLogger.text = log;
