@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
 
     public DataDictionary dataCache;
     public CurrencyData currentRates;
-    
+
     private DateTime date;
 
     void Start()
@@ -48,15 +48,15 @@ public class GameManager : MonoBehaviour
     /// <param name="_date"></param>
     public void SetDate(DateTime _date)
     {
-        // var result = "Submitted data cache request. Date received: " + _date.ToString("yyyy-MM-dd") + "\n";
+        var result = "Submitted data cache request. Date received: " + _date.ToString("yyyy-MM-dd") + "\n";
         date = _date;
         currentRates = dataCache.GetEntry(date);
         dateOutput.text = currentRates.lastUpdate.ToString("dd MMM yyyy");
         RecalculateRate(currencies[0], currencies[1]);
 
-        // result += "Data loaded: " + currentRates.lastUpdate.ToString("yyyy-MM-dd") + "\n";
-        // result += "Rates loading completed. \n";
-        // DebugLog(result);
+        result += "Data loaded: " + currentRates.lastUpdate.ToString("yyyy-MM-dd") + "\n";
+        result += "Rates loading completed. \n";
+        DebugLog(result);
 
     }
     #endregion
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
     }
     public void DEBUGOnFileRead()
     {
-        // var result = FileSystem.ReadBin<Dictionary<DateTime, CurrencyData>>("currencyData.cache");
+        // var result = FileSystem.ReadBin<Dictionary<DateTime, CurrencyData>>("currencyData.asset");
         // DebugLog(result.ToString());
     }
     public void DEBUGSetDate(InputField field)

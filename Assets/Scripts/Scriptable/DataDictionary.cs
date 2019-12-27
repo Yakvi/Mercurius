@@ -9,7 +9,7 @@ public class DataDictionary : ScriptableObject
 
     [Expandable] // TODO: make this attribute work with dictionaries
     public Dictionary<DateTime, CurrencyData> data;
-    private string dataPath = "currencyData.asset";
+    private string dataPath = "currencyRates.asset";
     public int Count
     {
         get => data.Count;
@@ -53,6 +53,7 @@ public class DataDictionary : ScriptableObject
     public void Load()
     {
         data = FileSystem.ReadBin<Dictionary<DateTime, CurrencyData>>(dataPath);
+        if(data == null) data = new Dictionary<DateTime, CurrencyData>();
     }
 
     private void Save()
