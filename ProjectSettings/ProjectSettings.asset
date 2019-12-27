@@ -8,7 +8,7 @@ PlayerSettings:
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
-  defaultScreenOrientation: 0
+  defaultScreenOrientation: 4
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -56,8 +56,8 @@ PlayerSettings:
   iosAllowHTTPDownload: 1
   allowedAutorotateToPortrait: 1
   allowedAutorotateToPortraitUpsideDown: 1
-  allowedAutorotateToLandscapeRight: 0
-  allowedAutorotateToLandscapeLeft: 0
+  allowedAutorotateToLandscapeRight: 1
+  allowedAutorotateToLandscapeLeft: 1
   useOSAutorotation: 1
   use32BitDisplayBuffer: 1
   preserveFramebufferAlpha: 0
@@ -164,8 +164,8 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.IvanYakymchak.Mercurius
   buildNumber: {}
-  AndroidBundleVersionCode: 6
-  AndroidMinSdkVersion: 19
+  AndroidBundleVersionCode: 11
+  AndroidMinSdkVersion: 21
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -697,7 +697,7 @@ PlayerSettings:
     29: EASY_MOBILE;EASY_MOBILE_PRO
   platformArchitecture: {}
   scriptingBackend:
-    Android: 1
+    Android: 0
     Standalone: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
