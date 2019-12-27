@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,7 +8,7 @@ public class DataDictionary : ScriptableObject
 {
 
     [Expandable] // TODO: make this attribute work with dictionaries
-    public Dictionary<DateTime, CurrencyData> data = new Dictionary<DateTime, CurrencyData>();
+    public Dictionary<DateTime, CurrencyData> data;
     private string dataPath = "currencyData.asset";
     public int Count
     {
@@ -20,6 +17,7 @@ public class DataDictionary : ScriptableObject
 
     public void Add(DateTime date, CurrencyData entry)
     {
+        if (data == null) data = new Dictionary<DateTime, CurrencyData>();
         data.Add(date, entry);
         Save();
     }
@@ -27,7 +25,7 @@ public class DataDictionary : ScriptableObject
     public bool HasEntry(DateTime key)
     {
         var result = false;
-        if (data.Count > 0)
+        if (data?.Count > 0)
         {
             result = data.ContainsKey(key);
         }
@@ -39,7 +37,7 @@ public class DataDictionary : ScriptableObject
     {
         if (!HasEntry(date))
         {
-            CurrencyAPI.GetCurrencyData(this, date);
+            Add(date, CurrencyAPI.GetCurrencyData(date));
         }
         CurrencyData result = null;
         data.TryGetValue(date, out result);

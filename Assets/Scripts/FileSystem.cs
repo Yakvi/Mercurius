@@ -25,6 +25,7 @@ public class FileSystem
 
     public static T ReadBin<T>(string filename)
     {
+        Debug.Log("reading file " + filename + " from " + pathPrefix);
         var filePath = pathPrefix + filename;
 
         T result = default(T);

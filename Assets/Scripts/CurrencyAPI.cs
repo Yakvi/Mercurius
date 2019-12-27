@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -11,22 +10,21 @@ public class CurrencyAPI
     static string uriBase = "https://api.exchangeratesapi.io/";
     static HttpClient client = new HttpClient();
 
-    private static async Task<string> SendGetRequest(string uri)
+    private static string SendGetRequest(string uri)
     {
-        var responseTask = client.GetStringAsync(uriBase + uri);
-        return await responseTask;
+        var responseTask = client.GetStringAsync(uriBase + uri).Result;
+        return responseTask;
     }
 
-    public static async void GetCurrencyData(DataDictionary db, DateTime date)
+    public static CurrencyData GetCurrencyData(DateTime date)
     {
         var formattedDate = date.ToString("yyyy-MM-dd");
         Debug.Log("submitted API request. Date: " + formattedDate);
-        var responseTask = SendGetRequest(formattedDate);
-        var response = await responseTask;
-
+        var response = SendGetRequest(formattedDate);
+        
+        var rates = new CurrencyData();
         if (response != null)
         {
-            var rates = new CurrencyData();
             JObject parsedResponse = JObject.Parse(response);
             // NOTE: expected response structure:
             // rates, a dictionary of currency/rate pairs
@@ -38,8 +36,8 @@ public class CurrencyAPI
 
             rates.lastUpdate = DateTime.Parse(parsedResponse["date"].ToString());
 
-            db.Add(date, rates);
             Debug.Log("Currency dataset successfully added for " + date);
         }
+        return rates;
     }
 }
