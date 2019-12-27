@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,7 +12,7 @@ public class DataDictionary : ScriptableObject
 
     [Expandable] // TODO: make this attribute work with dictionaries
     public Dictionary<DateTime, CurrencyData> data = new Dictionary<DateTime, CurrencyData>();
-
+    private string dataPath = "currencyData.asset";
     public int Count
     {
         get => data.Count;
@@ -20,7 +21,7 @@ public class DataDictionary : ScriptableObject
     public void Add(DateTime date, CurrencyData entry)
     {
         data.Add(date, entry);
-        SaveData();
+        Save();
     }
 
     public bool HasEntry(DateTime key)
@@ -34,32 +35,31 @@ public class DataDictionary : ScriptableObject
         return result;
     }
 
+    public CurrencyData GetEntry(DateTime date)
+    {
+        if (!HasEntry(date))
+        {
+            CurrencyAPI.GetCurrencyData(this, date);
+        }
+        CurrencyData result = null;
+        data.TryGetValue(date, out result);
+        return result;
+    }
+
     public void Clear()
     {
         data.Clear();
-        SaveData();
+        Save();
     }
 
     public void Load()
     {
-        var dataPath = Application.persistentDataPath + "/currencyData.cache";
-        if (File.Exists(dataPath))
-        {
-            var binaryFormatter = new BinaryFormatter();
-            var file = File.OpenRead(Application.persistentDataPath + "/currencyData.cache");
-            if (file.Length > 0)
-            {
-                data = (Dictionary<DateTime, CurrencyData>) binaryFormatter.Deserialize(file);
-                file.Close();
-            }
-        }
+        data = FileSystem.ReadBin<Dictionary<DateTime, CurrencyData>>(dataPath);
     }
 
-    private void SaveData()
+    private void Save()
     {
-        var binaryFormatter = new BinaryFormatter();
-        var file = File.Create(Application.persistentDataPath + "/currencyData.cache");
-        binaryFormatter.Serialize(file, data);
-        file.Close();
+        FileSystem.CreateWriteBin<Dictionary<DateTime, CurrencyData>>(dataPath, data);
     }
+
 }

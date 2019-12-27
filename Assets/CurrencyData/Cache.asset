@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d86271a41f04e124689fb2549696f9f0, type: 3}
-  m_Name: Main Data Dictionary
+  m_Name: Cache
   m_EditorClassIdentifier: 

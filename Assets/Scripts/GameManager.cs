@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using pingak9;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    DateTime date = DateTime.Today;
-    [SerializeField]
-    Text dateOutput;
-    [SerializeField]
-    CurrencyUI[] currencies;
-    [SerializeField]
-    DataDictionary dataCache;
+    private string version = "0.0.5";
+    private string build = "11";
+
+    DateTime date;
+    public Text dateOutput;
+    
+    public CurrencyUI[] currencies;
+    public DataDictionary dataCache;
+    public CurrencyData currentRates;
 
     // DEBUG: clear on release
-    [SerializeField]
-    Text debugLogger;
+    public Text debugLogger, debugVersion;
     public void DebugLog(string log)
     {
         debugLogger.text = log;
@@ -24,18 +26,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        debugVersion.text = "ver." + version + " build " + build;
+
         dataCache.Load();
-        if (!dataCache.HasEntry(date))
-        {
-            CurrencyAPI.GetCurrencyData(dataCache, date);
-            DebugLog("Started adding today's data");
-        }
+
+        SetDate(DateTime.Today);
     }
 
-    void Update()
+    public void DEBUGOnFileRead()
     {
-
-        dateOutput.text = date.ToString("dd MMM yyyy");
+        var result = FileSystem.ReadBin<Dictionary<DateTime, CurrencyData>>("currencyData.cache");
+        DebugLog(result.ToString());
     }
 
     public void OnDatePicker()
@@ -47,6 +48,18 @@ public class GameManager : MonoBehaviour
     private void SetDate(DateTime _date)
     {
         date = _date;
-        DebugLog(_date.ToString());
+
+        DebugLog("Submitted data cache request. Data Cache size: " + dataCache.data.Keys.Count);
+        // currentRates = dataCache.GetEntry(date);
+        // dateOutput.text = date.ToString("dd MMM yyyy");
+        // foreach (var outputUI in currencies)
+        // {
+        //     outputUI.types.ClearOptions();
+        //     outputUI.types.AddOptions(new List<string>(currentRates.rates.Keys));
+        // }
+        // string result = "Date selection completed. \n";
+        // result+= "data updated on:\n" + currentRates.lastUpdate.ToString();
+        // DebugLog(result);
+
     }
 }

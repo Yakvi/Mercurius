@@ -20,6 +20,7 @@ public class CurrencyAPI
     public static async void GetCurrencyData(DataDictionary db, DateTime date)
     {
         var formattedDate = date.ToString("yyyy-MM-dd");
+        Debug.Log("submitted API request. Date: " + formattedDate);
         var responseTask = SendGetRequest(formattedDate);
         var response = await responseTask;
 
