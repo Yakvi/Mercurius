@@ -37,7 +37,7 @@ namespace pingak9
         // Events
         //--------------------------------------
 
-        string formatDate = "yyyy-MM-dd HH:mm:ss";
+        // string formatDate = "yyyy-MM-dd HH:mm:ss";
         /// <summary>
         /// Note avalible in android
         /// </summary>

@@ -19,7 +19,7 @@ public class CurrencyAPI
     public static CurrencyData GetCurrencyData(DateTime date)
     {
         var formattedDate = date.ToString("yyyy-MM-dd");
-        Debug.Log("submitted API request. Date: " + formattedDate);
+        // Debug.Log("submitted API request. Date: " + formattedDate);
         var response = SendGetRequest(formattedDate);
         
         var rates = new CurrencyData();
@@ -36,7 +36,7 @@ public class CurrencyAPI
 
             rates.lastUpdate = DateTime.Parse(parsedResponse["date"].ToString());
 
-            Debug.Log("Currency dataset successfully added for " + date);
+            // Debug.Log("Currency dataset successfully added for " + date);
         }
         return rates;
     }

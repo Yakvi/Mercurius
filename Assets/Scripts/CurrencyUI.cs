@@ -28,7 +28,7 @@ public class CurrencyUI : MonoBehaviour
         }
         else
         {
-            Debug.LogError(pref + "currency not found");
+            // Debug.LogError(pref + "currency not found");
         }
         types.SetValueWithoutNotify(currencyIndex);
     }
