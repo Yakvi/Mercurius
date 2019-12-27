@@ -8,7 +8,7 @@ namespace pingak9
     {
         public NativeDialog() { }
 
-        public static void OpenDatePicker(int year , int month, int day, Action<DateTime> onChange = null, Action<DateTime> onClose = null)
+        public static void OpenDatePicker(int year , int month, int day, Action<DateTime> onChange, Action<DateTime> onClose)
         {
             MobileDateTimePicker.CreateDate(year, month, day, onChange, onClose);
         }

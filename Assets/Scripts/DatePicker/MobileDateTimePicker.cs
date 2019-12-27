@@ -20,7 +20,7 @@ namespace pingak9
 
         #region PUBLIC_FUNCTIONS
 
-        public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTime> onChange = null, Action<DateTime> onClose = null)
+        public static MobileDateTimePicker CreateDate(int year, int month, int day, Action<DateTime> onChange, Action<DateTime> onClose)
         {
             MobileDateTimePicker dialog;
             dialog = new GameObject("MobileDateTimePicker").AddComponent<MobileDateTimePicker>();
@@ -37,7 +37,7 @@ namespace pingak9
         // Events
         //--------------------------------------
 
-        // string formatDate = "yyyy-MM-dd HH:mm:ss";
+        string formatDate = "yyyy-MM-dd HH:mm:ss";
         /// <summary>
         /// Note avalible in android
         /// </summary>

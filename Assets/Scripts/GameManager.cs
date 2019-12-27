@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private string version = "0.0.6";
-    private string build = "13";
+    private string version = "0.1.1";
+    private string build = "16";
 
     DateTime date;
     public Text dateOutput;
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     {
         var target = FindTarget(source);
         UpdatePrefs(source, target);
-        RecalculateRate(source, target);
+        RecalculateRate(target, source); // We change currency, so the same field get updated
     }
 
     /// <summary>
@@ -75,8 +75,8 @@ public class GameManager : MonoBehaviour
 
     private void UpdatePrefs(CurrencyUI source, CurrencyUI target)
     {
-        PlayerPrefs.SetString(currencies[0].tag, currencies[0].types.itemText.text);
-        PlayerPrefs.SetString(currencies[1].tag, currencies[1].types.itemText.text);
+        PlayerPrefs.SetString(source.tag, source.types.options[source.types.value].text);
+        PlayerPrefs.SetString(source.tag, source.types.options[source.types.value].text);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     /// <param name="target"></param>
     private void RecalculateRate(CurrencyUI source, CurrencyUI target)
     {
-        if (source.value.text != "" && target.value.text != "")
+        if (source.value.text != "")
         {
             var sourceType = source.types.options[source.types.value].text;
             var targetType = target.types.options[target.types.value].text;
@@ -102,19 +102,37 @@ public class GameManager : MonoBehaviour
                 currentRates.rates.TryGetValue(targetType, out targetRate);
             }
 
-            decimal sourceAmount = decimal.Parse(source.value.text) * sourceRate;
-            target.value.SetTextWithoutNotify((sourceAmount * targetRate).ToString());
+            var sourceAmount = decimal.Parse(source.value.text) / sourceRate;
+            var targetAmount = sourceAmount * targetRate;
+            target.value.SetTextWithoutNotify(Math.Round(targetAmount, 2).ToString());
         }
     }
 
-    private void SetDate(DateTime _date)
+    public void DEBUGSetDate(InputField field)
     {
+        SetDate(DateTime.Parse(field.text));
+    }
+
+    public void SetDate(DateTime _date)
+    {
+        var result = "Submitted data cache request. Date received: " + _date.ToString("yyyy-MM-dd") + "\n";
         date = _date;
 
         currentRates = dataCache.GetEntry(date);
-        DebugLog("Submitted data cache request. Data Cache size: " + dataCache.data.Keys.Count);
-        dateOutput.text = date.ToString("dd MMM yyyy");
+        
+        result += "Data loaded: " + currentRates.lastUpdate.ToString("yyyy-MM-dd") + "\n";
 
+        dateOutput.text = currentRates.lastUpdate.ToString("dd MMM yyyy");
+
+        RecalculateRate(currencies[0], currencies[1]);
+
+        result += "Rates loading completed. \n";
+        DebugLog(result);
+
+    }
+
+    private void FieldsInit()
+    {
         foreach (var outputUI in currencies)
         {
             outputUI.types.ClearOptions();
@@ -126,18 +144,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        string result = "Date selection completed. \n";
-        result += "data updated on:\n" + currentRates.lastUpdate.ToString();
-        DebugLog(result);
-
-    }
-
-    private void FieldsInit()
-    {
         var pref = PlayerPrefs.GetString(currencies[0].tag, "EUR");
-        currencies[0].SetValue(currentRates, pref);
+        currencies[0].SetCurrency(currentRates, pref);
         pref = PlayerPrefs.GetString(currencies[1].tag, "USD");
-        currencies[1].SetValue(currentRates, pref);
+        currencies[1].SetCurrency(currentRates, pref);
 
         currencies[0].value.text = "1";
     }

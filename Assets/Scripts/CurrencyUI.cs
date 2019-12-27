@@ -7,27 +7,29 @@ public class CurrencyUI : MonoBehaviour
     public Dropdown types;
     public InputField value;
 
-    public void SetValue(CurrencyData currentRates, string cur0pref)
+    public void SetCurrency(CurrencyData currentRates, string pref)
     {
-        if (currentRates.HasEntry(cur0pref))
+        var currencyIndex = 0;
+        if (currentRates.HasEntry(pref))
         {
             for (int i = 0; i < types.options.Count; i++)
             {
                 var option = types.options[i];
-                if (option.text == cur0pref)
+                if (option.text == pref)
                 {
-                    types.value = i;
+                    currencyIndex = i;
                 }
             }
-            value.text = cur0pref;
+            value.text = pref;
         }
-        else if (currentRates.baseCurrency == cur0pref)
+        else if (currentRates.baseCurrency == pref)
         {
-            types.value = 0;
+            currencyIndex = 0;
         }
         else
         {
-            Debug.LogError(cur0pref + "currency not found");
+            Debug.LogError(pref + "currency not found");
         }
+        types.SetValueWithoutNotify(currencyIndex);
     }
 }
