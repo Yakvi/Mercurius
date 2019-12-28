@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CurrencyUI : MonoBehaviour
 {
     public TextMeshProUGUI currency;
-    public InputField valueInput;
+    public TMP_InputField valueInput;
 
     public decimal amount
     {

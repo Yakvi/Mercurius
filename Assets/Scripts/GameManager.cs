@@ -27,6 +27,12 @@ public class GameManager : MonoBehaviour
 
     #region Callback Functions
 
+    public void OnClearCache()
+    {
+        dataCache.Clear();
+        SetDate(date);
+    }
+
     public void OnCurrencySelect(CurrencyUI source)
     {
         currencyList.gameObject.SetActive(true);
