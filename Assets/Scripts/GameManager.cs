@@ -24,6 +24,16 @@ public class GameManager : MonoBehaviour
 
     #region Callback Functions
 
+    public void OnFieldsSwap()
+    {
+        // var temp = (currencies[0].type, currencies[0].value);
+        // var curApos = currencies[0].GetComponent<RectTransform>();
+        // var curBpos = currencies[1].GetComponent<RectTransform>();
+        // temp = curApos.position;
+        // curApos.position = curBpos.position;
+        // curBpos.position = temp;
+    }
+
     public void OnDatePicker()
     {
         // DebugLog("Started date picking");
@@ -90,8 +100,8 @@ public class GameManager : MonoBehaviour
     /// <param name="target"></param>
     private void UpdatePlayerPrefs(CurrencyUI source, CurrencyUI target)
     {
-        PlayerPrefs.SetString(source.tag, source.types.options[source.types.value].text);
-        PlayerPrefs.SetString(source.tag, source.types.options[source.types.value].text);
+        PlayerPrefs.SetString(source.tag, source.type);
+        PlayerPrefs.SetString(source.tag, source.type);
     }
 
     /// <summary>
@@ -101,26 +111,11 @@ public class GameManager : MonoBehaviour
     /// <param name="target"></param>
     private void RecalculateRate(CurrencyUI source, CurrencyUI target)
     {
-        if (source.value.text != "")
-        {
-            var sourceType = source.types.options[source.types.value].text;
-            var targetType = target.types.options[target.types.value].text;
-            // Check if rebase is needed
-            decimal sourceRate = 1;
-            if (sourceType != currentRates.baseCurrency)
-            {
-                currentRates.rates.TryGetValue(sourceType, out sourceRate);
-            }
-            decimal targetRate = 1;
-            if (targetType != currentRates.baseCurrency)
-            {
-                currentRates.rates.TryGetValue(targetType, out targetRate);
-            }
+        decimal sourceRate = currentRates.getRate(source.type);
+        decimal targetRate = currentRates.getRate(target.type);
 
-            var sourceAmount = decimal.Parse(source.value.text) / sourceRate;
-            var targetAmount = sourceAmount * targetRate;
-            target.value.SetTextWithoutNotify(Math.Round(targetAmount, 2).ToString());
-        }
+        var baseCurrency = source.amount / sourceRate;
+        target.amount = baseCurrency * targetRate;
     }
 
     /// <summary>
@@ -139,12 +134,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        var pref = PlayerPrefs.GetString(currencies[0].tag, "EUR");
-        currencies[0].SetCurrency(currentRates, pref);
-        pref = PlayerPrefs.GetString(currencies[1].tag, "USD");
-        currencies[1].SetCurrency(currentRates, pref);
+        currencies[0].SetDefaultCurrency(currentRates, "EUR");
+        currencies[1].SetDefaultCurrency(currentRates, "USD");
 
-        currencies[0].value.text = "1.00";
+        currencies[0].amount = 1;
     }
     #endregion
 

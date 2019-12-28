@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   types: {fileID: 5718594707860920032}
-  value: {fileID: 1344117367732308892}
+  valueInput: {fileID: 1344117367732308892}
 --- !u!1 &7331567867937051978
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,31 +5,34 @@ using UnityEngine.UI;
 public class CurrencyUI : MonoBehaviour
 {
     public Dropdown types;
-    public InputField value;
+    public InputField valueInput;
 
-    public void SetCurrency(CurrencyData currentRates, string pref)
+    public decimal amount
     {
-        var currencyIndex = 0;
-        if (currentRates.HasEntry(pref))
+        get { return (valueInput.text == "") ? 0 : decimal.Parse(valueInput.text); }
+        set { valueInput.SetTextWithoutNotify(Math.Round(value, 2).ToString()); }
+    }
+
+    public string type
+    {
+        get { return types.options[types.value].text; }
+        set
         {
             for (int i = 0; i < types.options.Count; i++)
             {
-                var option = types.options[i];
-                if (option.text == pref)
+                var option = types.options[i].text;
+                if (option == value)
                 {
-                    currencyIndex = i;
+                    types.SetValueWithoutNotify(i);
+                    break;
                 }
             }
-            value.text = pref;
         }
-        else if (currentRates.baseCurrency == pref)
-        {
-            currencyIndex = 0;
-        }
-        else
-        {
-            // Debug.LogError(pref + "currency not found");
-        }
-        types.SetValueWithoutNotify(currencyIndex);
+    }
+
+    public void SetDefaultCurrency(CurrencyData data, string defaultValue)
+    {
+        var pref = PlayerPrefs.GetString(gameObject.tag, defaultValue);
+        if (data.HasEntry(pref)) type = pref;
     }
 }

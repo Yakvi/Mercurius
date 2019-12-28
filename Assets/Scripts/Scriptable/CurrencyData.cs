@@ -14,9 +14,19 @@ public class CurrencyData
         var result = false;
         if (rates?.Count > 0)
         {
-            result = rates.ContainsKey(key);
+            result = rates.ContainsKey(key) || key == baseCurrency;
         }
 
+        return result;
+    }
+
+    public decimal getRate(string type)
+    {
+        decimal result = 1;
+        if (type != baseCurrency)
+        {
+            rates.TryGetValue(type, out result);
+        }
         return result;
     }
 }
