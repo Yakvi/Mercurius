@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using pingak9;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public Text dateOutput;
+    public TextMeshProUGUI dateOutput;
     public CurrencyUI[] currencies;
 
     public DataDictionary dataCache;
@@ -48,15 +49,20 @@ public class GameManager : MonoBehaviour
     /// <param name="_date"></param>
     public void SetDate(DateTime _date)
     {
-        var result = "Submitted data cache request. Date received: " + _date.ToString("yyyy-MM-dd") + "\n";
+        // var result = "Submitted data cache request. Date received: " + _date.ToString("yyyy-MM-dd") + "\n";
         date = _date;
         currentRates = dataCache.GetEntry(date);
-        dateOutput.text = currentRates.lastUpdate.ToString("dd MMM yyyy");
+
+        dateOutput.text = "For the selected date, (";
+        dateOutput.text += _date.ToString("dd MMM yyyy");
+        dateOutput.text += "),\nConversion rates were updated on\n";
+        dateOutput.text += currentRates.lastUpdate.ToString("dd MMM yyyy");
+
         RecalculateRate(currencies[0], currencies[1]);
 
-        result += "Data loaded: " + currentRates.lastUpdate.ToString("yyyy-MM-dd") + "\n";
-        result += "Rates loading completed. \n";
-        DebugLog(result);
+        // result += "Data loaded: " + currentRates.lastUpdate.ToString("yyyy-MM-dd") + "\n";
+        // result += "Rates loading completed. \n";
+        // DebugLog(result);
 
     }
     #endregion
