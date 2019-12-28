@@ -9,7 +9,7 @@ User may select the amount to convert:
 * End currency
 * Conversion date (today by default)
 
-Convertion happens automatically based on the amount inserted in either field.
+Conversion happens automatically based on the amount inserted in either field.
 
 ### Additional features
 * Local data caching (with option to clear it)
