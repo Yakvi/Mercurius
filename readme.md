@@ -11,6 +11,11 @@ User may select the amount to convert:
 
 Convertion happens automatically based on the amount inserted in either field.
 
+### Additional features
+* Local data caching (with option to clear it)
+* Usage of native mobile date picking
+* Preservation of preferred currencies between sessions
+
 ## Build info
 ### Unity Version
 2019.3 (release)
