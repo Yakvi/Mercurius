@@ -9,11 +9,14 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI dateOutput;
     public CurrencyUI[] currencies;
+    public ScrollRect currencyList;
+    public GameObject currencyTemplate;
 
     public DataDictionary dataCache;
     public CurrencyData currentRates;
 
     private DateTime date;
+    private CurrencyUI currencySelector;
 
     void Start()
     {
@@ -23,6 +26,23 @@ public class GameManager : MonoBehaviour
     }
 
     #region Callback Functions
+
+    public void OnCurrencySelect(CurrencyUI source)
+    {
+        currencyList.gameObject.SetActive(true);
+        currencySelector = source;
+    }
+
+    public void OnCurrencyChanged(string value)
+    {
+        currencyList.gameObject.SetActive(false);
+        var source = currencySelector;
+        var target = FindTarget(source);
+
+        source.type = value;
+        UpdatePlayerPrefs(source, target);
+        RecalculateRate(target, source); // We change currency, so here target and source flip places
+    }
 
     public void OnFieldsSwap()
     {
@@ -44,13 +64,6 @@ public class GameManager : MonoBehaviour
     {
         var target = FindTarget(source);
         RecalculateRate(source, target);
-    }
-
-    public void OnCurrencyChanged(CurrencyUI source)
-    {
-        var target = FindTarget(source);
-        UpdatePlayerPrefs(source, target);
-        RecalculateRate(target, source); // We change currency, so here target and source flip places
     }
 
     /// <summary>
@@ -114,8 +127,11 @@ public class GameManager : MonoBehaviour
         decimal sourceRate = currentRates.getRate(source.type);
         decimal targetRate = currentRates.getRate(target.type);
 
-        var baseCurrency = source.amount / sourceRate;
-        target.amount = baseCurrency * targetRate;
+        if (sourceRate != 0)
+        {
+            var baseCurrency = source.amount / sourceRate;
+            target.amount = baseCurrency * targetRate;
+        }
     }
 
     /// <summary>
@@ -123,16 +139,19 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void FieldsInit()
     {
-        foreach (var outputUI in currencies)
+        var currencyJson = Resources.Load<TextAsset>("currencies");
+        var currencyNames = JsonUtility.FromJson<CurrencyJson>(currencyJson.text);
+        foreach (var currency in currencyNames.currencies)
         {
-            outputUI.types.ClearOptions();
-            if (currentRates?.rates?.Keys.Count > 0)
+            if (currentRates.HasEntry(currency.code))
             {
-                var ratesList = new List<string>(currentRates.rates.Keys);
-                ratesList.Insert(0, currentRates.baseCurrency);
-                outputUI.types.AddOptions(ratesList);
+                var button = Instantiate(currencyTemplate, currencyList.content);
+                button.GetComponent<CurrencyButton>().code.text = currency.code;
+                button.GetComponent<CurrencyButton>().designation.text = currency.name;
+                button.GetComponent<Button>().onClick.AddListener(() => OnCurrencyChanged(currency.code));
             }
         }
+        currencyList.gameObject.SetActive(false);
 
         currencies[0].SetDefaultCurrency(currentRates, "EUR");
         currencies[1].SetDefaultCurrency(currentRates, "USD");
@@ -160,4 +179,17 @@ public class GameManager : MonoBehaviour
         // SetDate(DateTime.Parse(field.text));
     }
     #endregion
+}
+
+[System.Serializable]
+public class CurrencyJson
+{
+    public Currency[] currencies;
+}
+
+[System.Serializable]
+public class Currency
+{
+    public string name;
+    public string code;
 }
