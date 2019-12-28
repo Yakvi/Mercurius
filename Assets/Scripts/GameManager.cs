@@ -26,12 +26,12 @@ public class GameManager : MonoBehaviour
 
     public void OnFieldsSwap()
     {
-        // var temp = (currencies[0].type, currencies[0].value);
-        // var curApos = currencies[0].GetComponent<RectTransform>();
-        // var curBpos = currencies[1].GetComponent<RectTransform>();
-        // temp = curApos.position;
-        // curApos.position = curBpos.position;
-        // curBpos.position = temp;
+        var temp = (type: currencies[1].type, amount: currencies[1].amount);
+        currencies[1].type = currencies[0].type;
+        currencies[1].amount = currencies[0].amount;
+
+        currencies[0].type = temp.type;
+        currencies[0].amount = temp.amount;
     }
 
     public void OnDatePicker()
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
         currencies[0].SetDefaultCurrency(currentRates, "EUR");
         currencies[1].SetDefaultCurrency(currentRates, "USD");
 
-        currencies[0].amount = 1;
+        currencies[0].valueInput.text = "1.00";
     }
     #endregion
 
